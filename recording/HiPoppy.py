@@ -248,7 +248,6 @@ class RECORDING_1():
                          '<------ Click here to go to Hand Setting')
         self.info.config(justify=LEFT)
 
-
     def STOPREC(self):
         self.STOP = 1
 
@@ -327,14 +326,12 @@ class RECORDING_1():
         self.STOP = 0
 
         print('Starting the ROBOT')
-        #present_position = [motor[name].present_position for name in self.motorsName]
         goal_position = {"Robot": [0 for name in self.deadmotors],
                             "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
                             "Left_hand" : [200, 200, 100, 100, 200, 100, 100, 100, 100]}
         tools.go_to_pos(self.deadmotors, motor, goal_position, pub)
         tools.releas(self.motorsName, pub, motor)
         print('Robot started')
-
 
 class RECORDING_2():
 

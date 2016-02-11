@@ -46,6 +46,7 @@ def get_motors(data):
 def do_sign(buffer):
     time.sleep(5)
     start = time.time()
+    print "reseting positions"
     tools.reset(torso + head, present_pos, pub)
     robot_stat = 'ready'
     right_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
