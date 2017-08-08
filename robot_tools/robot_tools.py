@@ -4,14 +4,29 @@
 import time
 from robot_body.msg import motorSet
 motor = motorSet()
+right_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
+left_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
 
-def releas(names,pub, L=None, R=None):
+def releas(names, pub, present_pos=None, L=None, R=None):
+    if present_pos is not None:
+        goal_position = {"Robot": [-15 if name == "bust_y" else 0 for name in names],
+                         'Right_hand': right_hand, 'Left_hand': left_hand}
+        go_to_pos(names, present_pos, goal_position, pub)
     for name in names:
         motor.compliant = True
         pub[name].publish(motor)
     if (L is not None) & (R is not None):
         multi_servo_set([0]*9, [0]*9, L, R)
 
+def reset(names, motor_pos, pub):
+    goal_position = {"Robot": [0 for name in names],
+                     "Right_hand": right_hand,
+                     "Left_hand": left_hand}
+    go_to_pos(names, motor_pos, goal_position, pub)
+#    for name in names:
+#        motor.compliant = False
+#        motor.goal_position = 0
+#        pub[name].publish(motor)
 
 def do_seq(names, freq, seq, pub, L=None, R=None, HEAD=None, emotion=None):
     if (HEAD is not None) & (emotion is not None):

@@ -17,100 +17,33 @@ import robot_tools.robot_tools as tools
 import finger
 
 
-class REC():
 
-    # SELECT OR DESELECT THE CHILD OF THE CHECKBUTTON CLICKED
-    def selUsel(self, etat, list):
-        for i in list:
-            if etat == 1:
-                self.chkb['Var_%02d' % i].select()
-            else:
-                self.chkb['Var_%02d' % i].deselect()
-        i = 0
-        for var, value in sorted(self.cb.items()):
-            self.stat[i] = value.get()
-            i += 1
+class MAIN():
 
-    # CHECK THE CHECKBUTTON ON CLICK
-    def check(self, name, stt):
-
-        if name == 'Poppy':
-            self.selUsel(stt, range(0, len(self.lcb)))
-            return
-        if name not in self.alias:
-            return
-        for key in self.alias[name]:
-            if key in self.alias:
-                self.selUsel(stt, [self.lcb.index(key)])
-                self.check(key,stt)
-            else:
-                self.selUsel(stt, [self.lcb.index(key)])
-
-
-
-
-    def child(self):
-        self.stat
-        i = 0
-        chng = []
-        for var, value in sorted(self.cb.items()):
-            if self.stat[i] != value.get():
-                chng = i
-                stt = value.get()
-            self.stat[i] = value.get()
-            i += 1
-        self.check(self.lcb[chng], stt)
-
-        return self.stat
-
-    def _motor_extractor(self, alias, name, space):
-        l = []
-        self.ndx += 1
-        self.lcb.append(name)
-        self.cb['Var_%02d' % self.ndx] = IntVar()
-        self.chkb['Var_%02d' % self.ndx] = Checkbutton(self.master, text=space + name, variable=self.cb['Var_%02d' % self.ndx], command=self.child)
-        self.chkb['Var_%02d' % self.ndx].pack(anchor=NW)
-        space = '        ' + space
-        if name not in alias:
-            return [name]
-        for key in alias[name]:
-            if key in alias:
-                l += self._motor_extractor(alias, key, space)
-            else:
-                l += [key]
-                self.ndx += 1
-                self.lcb.append(key)
-                self.cb['Var_%02d' % self.ndx] = IntVar()
-                self.chkb['Var_%02d' % self.ndx] = Checkbutton(self.master, text=space + key, variable=self.cb['Var_%02d' % self.ndx],
-                                                     command=self.child)
-                self.chkb['Var_%02d' % self.ndx].pack(anchor=NW)
-
-        return l
-
-
-    def cancelCall(self):
-
+    def Close_call(self):
         self.master.destroy()
 
+    def action(self, parent):
+        for name in config.robot_2_config["motorgroups"][parent]:
+            if self.check_button_value[parent].get():
+                self.check_button[name].select()
+            else:
+                self.check_button[name].deselect()
 
-    def nextCall(self):
+    def manual_recording(self):
         selected = ''
-        i = 0
         mtrs = []
         nonActive = []
-        for var, value in sorted(self.cb.items()):
-            if self.lcb[i] in self.motor_names:
-                if value.get():
-                    selected += self.lcb[i]
-                    selected += ' '
-                    mtrs.append(self.lcb[i])
-                else:
-                    nonActive.append(self.lcb[i])
-            i += 1
-#        print mtrs
-#        print nonActive
+
+        for motor in self.motors_:
+            if self.check_button_value[motor].get():
+                selected += motor
+                selected += ' '
+                mtrs.append(motor)
+            else:
+                nonActive.append(motor)
+
         if selected == '':
-          #  tkMessageBox.ERROR
             tkMessageBox.showerror(title= 'Warning', message='You need to select at least ONE Actor!')
             return None
         if tkMessageBox.askyesno(title='Warning',
@@ -123,22 +56,21 @@ class REC():
             # self.master.wait_window(RECD)
             myRec = RECORDING_1(rec_fram, mtrs)
 
-    def pos_nextCall(self):
+
+
+    def pos_by_pos_recording(self):
         selected = ''
-        i = 0
         mtrs = []
         nonActive = []
-        for var, value in sorted(self.cb.items()):
-            if self.lcb[i] in self.motor_names:
-                if value.get():
-                    selected += self.lcb[i]
-                    selected += ' '
-                    mtrs.append(self.lcb[i])
-                else:
-                    nonActive.append(self.lcb[i])
-            i += 1
-            #        print mtrs
-            #        print nonActive
+
+        for motor in self.motors_:
+            if self.check_button_value[motor].get():
+                selected += motor
+                selected += ' '
+                mtrs.append(motor)
+            else:
+                nonActive.append(motor)
+
         if selected == '':
             #  tkMessageBox.ERROR
             tkMessageBox.showerror(title='Warning', message='You need to select at least ONE Actor!')
@@ -150,22 +82,9 @@ class REC():
             pos_rec_fram.grab_set()
             pos_rec_fram.transient(self.master)
             # self.master.wait_window(RECD)
+            #print mtrs
             myPosRec = RECORDING_2(pos_rec_fram, mtrs)
 
-    def method(self):
-        if self.Var.get() == 1:
-            for key, value in self.chkb.items():
-                value.config(state = NORMAL)
-
-            self.Next.config(state=NORMAL)
-            self.loadFile.config(state=DISABLED)
-        else:
-
-            for key, value in self.chkb.items():
-                value.config(state=DISABLED)
-
-            self.Next.config(state=DISABLED)
-            self.loadFile.config(state=NORMAL)
 
     def editSign(self):
         recFile = tkFileDialog.askopenfilename(initialdir="/home/odroid/catkin_ws/src/robot_body/recording/data_base")
@@ -181,45 +100,103 @@ class REC():
 
     def __init__(self, master):
         self.master = master
-        self.master.geometry('480x720')
-        self.master.title('Hi Poppy ;)')
-        self.label1 = Label(self.master, text='Hi Poppy', font="Helvetica 48 bold italic").pack(anchor=N)
-        self.label2 = Label(self.master, justify=LEFT, text='To record new sing choose "Record new Sign" than select the actors, \n'
-                                                            'or choose "Edit old Sign" and select the file to edit it.').pack(anchor=NW)
-        self.Var = IntVar(master, value=1)
-        self.option1 = Radiobutton(self.master, text="Record new Sign", variable = self.Var, value = 1, command=self.method)
-        self.option1.pack(anchor=NW)
-        self.option1.select()
-        self.cb = dict()
-        self.chkb = dict()
-        self.config = config.robot_config
-        self.alias = self.config['motorgroups']
-        self.lcb = ['Poppy']
-        self.ndx = 0
-        self.cb['Var_%02d' % self.ndx] = IntVar()
-        self.chkb['Var_%02d' % self.ndx] = Checkbutton(master, text="_Poppy", variable=self.cb['Var_%02d' % self.ndx], command=self.child)
-        self.chkb['Var_%02d' % self.ndx].pack(anchor=NW)
-        space = "      |____ "
-        for c_name, c_params in self.config['controllers'].items():
-            self.motor_names = sum([self._motor_extractor(self.alias, name, space)
-                               for name in c_params['attached_motors']], [])
-        self.stat = [0] * len(self.cb)
+        self.check_button_value = {}
+        self.check_button={}
+        self.master.title('Hi Poppy ;-)')
+        self.new_sign_panel = LabelFrame(master, text="Record new sign")
+        self.new_sign_panel.pack(fill="both", expand="yes")
 
-        self.Next = Button(master, text="Manual Recording", width=20, command=self.nextCall)
-        self.Next.pack(anchor=NW)
-        self.PosByPos = Button(master, text="POS_BY_POS Recording", width=20, command=self.pos_nextCall)
-        self.PosByPos.pack(anchor=NW)
-        self.option2 = Radiobutton(self.master, text="Edit old Sign", variable=self.Var, value = 2, command=self.method)
-        self.option2.pack(anchor=NW)
-        self.option2.deselect()
+        self.head = LabelFrame(self.new_sign_panel, text="Head")
+        self.head.grid(row=0, column=1, rowspan=2)
+        self.check_button_value["head"] = IntVar()
+        self.check_button["head"] = Checkbutton(self.head, text = "", variable = self.check_button_value["head"], command= lambda: self.action("head"))
+        self.check_button["head"].grid(row=0, column=0)
+        self.check_button_value["head_y"] = IntVar()
+        self.check_button["head_y"] = Checkbutton(self.head, text = "head_y", variable = self.check_button_value["head_y"])
+        self.check_button["head_y"].grid(row=1, column=1, sticky=W)
+        self.check_button_value["head_z"] = IntVar()
+        self.check_button["head_z"] = Checkbutton(self.head, text = "head_z", variable =self.check_button_value["head_z"])
+        self.check_button["head_z"].grid(row=2, column=1, sticky=W)
 
-        self.loadFile = Button(self.master, text="Load File", width=10, command=self.editSign)
-        self.loadFile.pack(anchor=NW)
-        self.loadFile.config(state=DISABLED)
+        self.manuel = Button(self.new_sign_panel, text="Manuel recording", width=15, command=self.manual_recording)
+        self.manuel.grid(row=0, column=0)
+        self.pos_by_pos = Button(self.new_sign_panel, text="Pos By Pos recording", width=15, command=self.pos_by_pos_recording)
+        self.pos_by_pos.grid(row=1, column=0)
 
-        self.Cancel = Button(master, text="Cancel", width=10, command=self.cancelCall)
-        self.Cancel.pack(anchor=E)
 
+        self.torso = LabelFrame(self.new_sign_panel, text="Torso")
+        self.torso.grid(row=2, column=1)
+        self.check_button_value["torso"] = IntVar()
+        self.check_button["torso"] = Checkbutton(self.torso, text = "", variable = self.check_button_value["torso"], command= lambda: self.action("torso"))
+        self.check_button["torso"].grid(row=0, column=0)
+        self.check_button_value["abs_z"] = IntVar()
+        self.check_button["abs_z"] = Checkbutton(self.torso, text = "abs_z", variable = self.check_button_value["abs_z"])
+        self.check_button["abs_z"].grid(row=1, column=1, sticky=W)
+        self.check_button_value["bust_y"] = IntVar()
+        self.check_button["bust_y"] = Checkbutton(self.torso, text = "bust_y", variable = self.check_button_value["bust_y"])
+        self.check_button["bust_y"].grid(row=2, column=1, sticky=W)
+        self.check_button_value["bust_x"] = IntVar()
+        self.check_button["bust_x"] = Checkbutton(self.torso, text = "bust_x", variable = self.check_button_value["bust_x"])
+        self.check_button["bust_x"].grid(row=3, column=1, sticky=W)
+
+
+
+        self.R_arm = LabelFrame(self.new_sign_panel, text="R_arm")
+        self.R_arm.grid(row=2, column=2, sticky=E)
+        self.check_button_value["r_arm"] = IntVar()
+        self.check_button["r_arm"] = Checkbutton(self.R_arm, text = "", variable = self.check_button_value["r_arm"], command= lambda: self.action("r_arm"))
+        self.check_button["r_arm"].grid(row=0, column=0)
+        self.check_button_value["r_shoulder_y"] = IntVar()
+        self.check_button["r_shoulder_y"] = Checkbutton(self.R_arm, text = "r_shoulder_y", variable = self.check_button_value["r_shoulder_y"])
+        self.check_button["r_shoulder_y"].grid(row=1, column=1, sticky=W)
+        self.check_button_value["r_shoulder_x"] = IntVar()
+        self.check_button["r_shoulder_x"] = Checkbutton(self.R_arm, text = "r_shoulder_x", variable = self.check_button_value["r_shoulder_x"])
+        self.check_button["r_shoulder_x"].grid(row=2, column=1, sticky=W)
+        self.check_button_value["r_arm_z"] = IntVar()
+        self.check_button["r_arm_z"] = Checkbutton(self.R_arm, text = "r_arm_z", variable = self.check_button_value["r_arm_z"])
+        self.check_button["r_arm_z"].grid(row=3, column=1, sticky=W)
+        self.check_button_value["r_elbow_y"] = IntVar()
+        self.check_button["r_elbow_y"] = Checkbutton(self.R_arm, text = "r_elbow_y", variable = self.check_button_value["r_elbow_y"])
+        self.check_button["r_elbow_y"].grid(row=4, column=1, sticky=W)
+        self.check_button_value["r_forearm_z"] = IntVar()
+        self.check_button["r_forearm_z"] = Checkbutton(self.R_arm, text = "r_forearm_z", variable = self.check_button_value["r_forearm_z"])
+        self.check_button["r_forearm_z"].grid(row=5, column=1, sticky=W)
+
+        self.L_arm = LabelFrame(self.new_sign_panel, text="L_arm")
+        self.L_arm.grid(row=2, column=0, sticky=E)
+        self.check_button_value["l_arm"] = IntVar()
+        self.check_button["l_arm"] = Checkbutton(self.L_arm, text = "", variable = self.check_button_value["l_arm"], command= lambda: self.action("l_arm"))
+        self.check_button["l_arm"].grid(row=0, column=0)
+        self.check_button_value["l_shoulder_y"] = IntVar()
+        self.check_button["l_shoulder_y"] = Checkbutton(self.L_arm, text = "l_shoulder_y", variable = self.check_button_value["l_shoulder_y"])
+        self.check_button["l_shoulder_y"].grid(row=1, column=1, sticky=W)
+        self.check_button_value["l_shoulder_x"] = IntVar()
+        self.check_button["l_shoulder_x"] = Checkbutton(self.L_arm, text = "l_shoulder_x", variable = self.check_button_value["l_shoulder_x"])
+        self.check_button["l_shoulder_x"].grid(row=2, column=1, sticky=W)
+        self.check_button_value["l_arm_z"] = IntVar()
+        self.check_button["l_arm_z"] = Checkbutton(self.L_arm, text = "l_arm_z", variable = self.check_button_value["l_arm_z"])
+        self.check_button["l_arm_z"].grid(row=3, column=1, sticky=W)
+        self.check_button_value["l_elbow_y"] = IntVar()
+        self.check_button["l_elbow_y"] = Checkbutton(self.L_arm, text = "l_elbow_y", variable = self.check_button_value["l_elbow_y"])
+        self.check_button["l_elbow_y"].grid(row=4, column=1, sticky=W)
+        self.check_button_value["l_forearm_z"] = IntVar()
+        self.check_button["l_forearm_z"] = Checkbutton(self.L_arm, text = "l_forearm_z", variable = self.check_button_value["l_forearm_z"])
+        self.check_button["l_forearm_z"].grid(row=5, column=1, sticky=W)
+
+        self.motors_ = config.get_motor_list(config.robot_2_config)
+        for name, param in self.check_button.items():
+            if (param['text']!="") & (param['text'] not in self.motors_):
+                param.config(state=DISABLED)
+
+
+
+        self.edit_sign_panel = LabelFrame(master, text="Edit old sign")
+        self.edit_sign_panel.pack(fill="both", expand="yes")
+        self.loadFile = Button(self.edit_sign_panel, text="Load File", width=10, command=self.editSign)
+        self.loadFile.pack()
+
+        self.Close = Button(master, text="Close", width=10, command=self.Close_call)
+        self.Close.pack(anchor=E)
 
 
 
@@ -230,7 +207,7 @@ class RECORDING_1():
     def STARTREC(self):
         self.STOP = 0
         self.sleeping = 1 / float(self.Frq.get())
-        present_position = [motor[name].present_position for name in self.deadmotors]
+        #present_position = [motor[name].present_position for name in self.motorsName]
         IDs = [motor[name].id for name in self.motorsName]
         self.pos = {}
         tools.releas(self.motorsName, pub)
@@ -257,6 +234,7 @@ class RECORDING_1():
                             'emotion_name':'',
                             'text': '',
                             'emotion_time': [],
+                            'speak': '',
                             'position':self.pos
                        }
         self.save.config(state=NORMAL)
@@ -293,11 +271,12 @@ class RECORDING_1():
 
     def CLOSE(self):
         print 'closing the robot'
-        goal_position = {"Robot": [0 for name in self.motorsName],
-                            "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
-                            "Left_hand" : [200, 200, 100, 100, 200, 100, 100, 100, 100]}
-        tools.go_to_pos(self.motorsName, motor, goal_position, pub)
-        tools.releas(self.motorsName, pub)
+        #present_position = [motor[name].present_position for name in self.motorsName]
+        #goal_position = {"Robot": [0 for name in self.motorsName],
+        #                    "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
+        #                    "Left_hand" : [200, 200, 100, 100, 200, 100, 100, 100, 100]}
+        #tools.go_to_pos(self.motorsName, motor, goal_position, pub)
+        tools.releas(self.motorsName, pub, motor)
         print 'Robot Closed'
         self.master.destroy()
 
@@ -348,11 +327,12 @@ class RECORDING_1():
         self.STOP = 0
 
         print('Starting the ROBOT')
+        #present_position = [motor[name].present_position for name in self.motorsName]
         goal_position = {"Robot": [0 for name in self.deadmotors],
                             "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
                             "Left_hand" : [200, 200, 100, 100, 200, 100, 100, 100, 100]}
         tools.go_to_pos(self.deadmotors, motor, goal_position, pub)
-        tools.releas(self.motorsName, pub)
+        tools.releas(self.motorsName, pub, motor)
         print('Robot started')
 
 
@@ -387,11 +367,16 @@ class RECORDING_2():
             i=len(self.sign["position"])
         self.sign["actors_NAME"]=self.motorsName
         self.sign["frame_number"]=i
+
         self.play.config(state=NORMAL)
         self.save.config(state=NORMAL)
         self.set_hand.config(state=NORMAL)
         self.info.set("Done building")
-
+        self.sign["freq"] = float(self.sign["frame_number"]) / float(self.time.get())
+        self.sign["emotion_name"] = ''
+        self.sign["text"] = ''
+        self.sign["emotion_time"] = []
+        self.sign["speak"] = ''
     def play(self):
         self.info.set("Playing")
         goal_position = self.sign["position"]["0"]
@@ -414,21 +399,23 @@ class RECORDING_2():
         if not saveFile:
             return None
 
-        self.sign["freq"]=float(self.sign["frame_number"])/float(self.time.get())
-        self.sign["emotion_name"]=''
-        self.sign["text"] = ''
-        self.sign["emotion_time"]=[]
+        #self.sign["freq"]=float(self.sign["frame_number"])/float(self.time.get())
+        #self.sign["emotion_name"]=''
+        #self.sign["text"] = ''
+        #self.sign["emotion_time"]=[]
+        #self.sign["speak"] = ''
         with open(saveFile, "w") as record:
             json.dump(self.sign, record)
         self.info.set("Saved")
 
     def close(self):
         self.info.set("Closing the Robot")
-        goal_position = {"Robot": [0 for name in self.motorsName],
-                         "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
-                         "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100]}
-        tools.go_to_pos(self.motorsName, motor, goal_position, pub)
-        tools.releas(self.motorsName, pub)
+        #present_position = [motor[name].present_position for name in self.motorsName]
+        #goal_position = {"Robot": [0 for name in self.motorsName],
+        #                 "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
+        #                 "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100]}
+        #tools.go_to_pos(self.motorsName, motor, goal_position, pub)
+        tools.releas(self.motorsName, pub ,motor)
         self.info.set("Robot Closed")
         self.master.destroy()
 
@@ -539,11 +526,12 @@ class RECORDING_2():
 
 
         print('Starting the ROBOT')
+        #present_position = [motor[name].present_position for name in self.motorsName]
         goal_position = {"Robot": [0 for name in self.deadmotors],
                          "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
                          "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100]}
         tools.go_to_pos(self.deadmotors, motor, goal_position, pub)
-        tools.releas(self.motorsName, pub)
+        tools.releas(self.motorsName, pub ,motor)
         print('Robot started')
         self.info.set("Robot is Ready")
 
@@ -575,10 +563,11 @@ def start_topics(list):
 
 def main():
     root = Tk()
-    hi_poppy = REC(root)
+    hi_poppy = MAIN(root)
     root.mainloop()
 
-motor_names = config.get_motor_list(config.robot_config)
+motor_names = config.get_motor_list(config.robot_2_config)
+
 
 
 if __name__ == '__main__':

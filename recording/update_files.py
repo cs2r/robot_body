@@ -2,7 +2,6 @@
 import os
 import json
 
-
 path = "/home/odroid/catkin_ws/src/robot_body/recording/data_base/"
 dir = os.listdir(path)
 for file in dir:

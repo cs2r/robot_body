@@ -13,16 +13,10 @@ import robot_tools.robot_tools as tools
 
 print 'ROBOT succiful import'
 
-activemotors = {'abs_z', 'bust_y', 'bust_x'}
-robot = pypot.robot.from_config(pypot.robot.config.robot_config)
+robot = pypot.robot.from_config(pypot.robot.config.robot_2_config)
 err_max = 10
-
 pupStat = rospy.Publisher('Robot_status', String, queue_size=10)
-
 pub = dict()
-
-
-
 
 def Openning():
     print('Starting the ROBOT')
@@ -55,29 +49,44 @@ def Openning():
         robot_status = err.message
         pupStat.publish(robot_status)
 
-
 def Closing():
+    print('Closing the ROBOT')
     try:
-        print 'Closing the robot'
+        right_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
+        left_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
+        present_position = {"Robot": [m.present_position for m in robot.motors if m.compliant == False], 'Right_hand': right_hand,
+                            'Left_hand': left_hand}
+        goal_position = {"Robot": [-15 if m.id==34 else 0 for m in robot.motors if m.compliant == False], 'Right_hand': right_hand, 'Left_hand': left_hand}
+        max_err=0
+        for id in range(len(goal_position["Robot"])):
+            max_err = max([abs(goal_position["Robot"][id] - present_position["Robot"][id]), max_err])
+        if max_err > err_max:
+            preset = tools.build_seq(present_position, goal_position, int(max_err))
+            for frame in range(len(preset)):
+                id = 0
+                for m in robot.motors:
+                    if m.compliant==False:
+                        m.goal_position = preset[str(frame)]['Robot'][id]
+                        id += 1
+                time.sleep(1 / max_err)
+
+        print 'RELEASING AND CLOSING THE ROBOT'
         for m in robot.motors:
             m.compliant = True
         robot.close()
-        robot_status = 'Closed'
-        pupStat.publish(robot_status)
-        print 'Robot Closed'
+        robot.close()
+        print 'ROBOT CLOSED'
     except Exception, err:
-        print err
-
+        print 'Robot can not close, error is '
+        print  err
 
 def callback(data, m):
     m.compliant = data.compliant
     m.goal_position = data.goal_position
 
-
 def publisher():
     motor = motorStat()
     while not rospy.is_shutdown():
-
         for m in robot.motors:
             motor.id = m.id
             motor.name = m.name
@@ -96,7 +105,7 @@ def publisher():
             motor.offset = m.offset
             motor.max_load = m.torque_limit
             pub[m.name].publish(motor)
-            if (motor.present_temperature > 65):
+            if (motor.present_temperature > 70):
                 robot_status = motor.name + ' is OVERHEATED, Present Tempirature is ' + str(motor.present_temperature)
                 pupStat.publish(robot_status)
                 print robot_status
@@ -107,7 +116,7 @@ def publisher():
 if __name__ == '__main__':
 
     rospy.init_node('robot_node', anonymous=True)
-    Openning()
+    #Openning()
     for m in robot.motors:
         pub[m.name] = rospy.Publisher('poppy/get/'+ m.name, motorStat, queue_size=1)
         rospy.Subscriber('poppy/set/'+ m.name, motorSet, callback=callback, callback_args=m)

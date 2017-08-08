@@ -31,11 +31,12 @@ logger = logging.getLogger(__name__)
 
 def get_motor_list(config):
     alias = config['motorgroups']
-    controllers = []
+    MOTORS_NAMES = []
     for c_name, c_params in config['controllers'].items():
         motor_names = sum([_motor_extractor(alias, name)
                            for name in c_params['attached_motors']], [])
-    return motor_names
+        MOTORS_NAMES = MOTORS_NAMES + motor_names
+    return MOTORS_NAMES
 
 
 
@@ -305,58 +306,23 @@ def _motor_extractor(alias, name):
 
 
 
-test_config = {
+
+
+robot_2_config = {
   "controllers": {
-    "rx_controller": {
-      "sync_read": True,
-      "attached_motors": [
-        "head"
-      ],
-      "port": "auto"
-    }
-  },
-  "motorgroups": {
-    "head": [
-      "head_z",
-      "head_y"
-    ]
-  },
-  "motors": {
-    "head_y": {
-      "offset": 0.0,
-      "type": "RX-64",
-      "id": 134,
-      "angle_limit": [
-        -150,
-        150
-      ],
-      "orientation": "indirect"
-    },
-    "head_z": {
-      "offset": 0.0,
-      "type": "RX-64",
-      "id": 141,
-      "angle_limit": [
-        -150,
-        150
-      ],
-      "orientation": "direct"
-    }
-  }
-}
-
-
-
-
-
-robot_config = {
-  "controllers": {
-    "upper_body_controller": {
+    "AX_controller": {
       "sync_read": True,
       "attached_motors": [
         "torso",
         "head",
-        "arms"
+        "ax_arms"
+      ],
+      "port": "auto"
+    },
+    "RX_controller": {
+      "sync_read": False,
+      "attached_motors": [
+        "rx_arms"
       ],
       "port": "auto"
     }
@@ -366,7 +332,7 @@ robot_config = {
       "head_z",
       "head_y"
     ],
-    "r_arm": [
+   "r_arm": [
       "r_shoulder_y",
       "r_shoulder_x",
       "r_arm_z",
@@ -374,9 +340,7 @@ robot_config = {
       "r_forearm_z"
     ],
     "torso": [
-      "abs_z",
-      "bust_y",
-      "bust_x"
+      "abs_z"
     ],
     "l_arm": [
       "l_shoulder_y",
@@ -388,16 +352,30 @@ robot_config = {
     "arms": [
       "l_arm",
       "r_arm"
-    ]
-  },
+    ],
+      "ax_arms": [
+      "r_shoulder_x",
+      "r_arm_z",
+      "r_forearm_z",
+      "l_shoulder_x",
+      "l_arm_z",
+      "l_forearm_z"
+    ],
+      "rx_arms": [
+        "r_shoulder_y",
+        "r_elbow_y",
+        "l_shoulder_y",
+        "l_elbow_y"
+      ]
+},
   "motors": {
     "l_elbow_y": {
-      "offset": -90.0,
-      "type": "MX-28",
+      "offset": 50.0, #-70.0
+      "type": "RX-64",
       "id": 44,
       "angle_limit": [
-        -180,
-        0
+        0,
+        180
       ],
       "orientation": "direct"
     },
@@ -432,7 +410,7 @@ robot_config = {
       "orientation": "direct"
     },
     "r_shoulder_x": {
-      "offset": 90.0,
+      "offset": 85.0,
       "type": "MX-28",
       "id": 52,
       "angle_limit": [
@@ -443,7 +421,7 @@ robot_config = {
     },
     "r_shoulder_y": {
       "offset": 90,
-      "type": "MX-28",
+      "type": "RX-64",
       "id": 51,
       "angle_limit": [
         -155,
@@ -452,12 +430,12 @@ robot_config = {
       "orientation": "indirect"
     },
     "r_elbow_y": {
-      "offset": -90.0,
-      "type": "MX-28",
+      "offset": 50, #-70.0
+      "type": "RX-64",
       "id": 54,
       "angle_limit": [
-        0,
-        180
+        -180,
+        0
       ],
       "orientation": "indirect"
     },
@@ -481,28 +459,8 @@ robot_config = {
       ],
       "orientation": "direct"
     },
-    "bust_y": {
-      "offset": 0.0,
-      "type": "MX-28",
-      "id": 34,
-      "angle_limit": [
-        -46,
-        23
-      ],
-      "orientation": "indirect"
-    },
-    "bust_x": {
-      "offset": 0.0,
-      "type": "MX-28",
-      "id": 35,
-      "angle_limit": [
-        -40,
-        40
-      ],
-      "orientation": "indirect"
-    },
     "l_shoulder_x": {
-      "offset": -90.0,
+      "offset": -85.0,
       "type": "MX-28",
       "id": 42,
       "angle_limit": [
@@ -513,7 +471,7 @@ robot_config = {
     },
     "l_shoulder_y": {
       "offset": 90,
-      "type": "MX-28",
+      "type": "RX-64",
       "id": 41,
       "angle_limit": [
         -120,
@@ -543,3 +501,5 @@ robot_config = {
     }
   }
 }
+
+

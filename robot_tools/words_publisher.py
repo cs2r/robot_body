@@ -10,14 +10,12 @@ from std_msgs.msg import String
 pub = rospy.Publisher('Word', String, queue_size=10)
 
 
-
 def send_word_s():
     words = text.get()
     words_list = words.split()
     for word in words_list:
         pub.publish(word)
         time.sleep(0.2)
-
 
 rospy.init_node('WORD_PUBLISHER', anonymous=True)
 master = Tk()

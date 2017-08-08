@@ -10,15 +10,13 @@ from robot_body.msg import Emotion
 import robot_tools.robot_tools as tools
 import json
 import numpy as np
-
+import robot_tools.ssh_get_files as ssh_files
 
 
 
 R = dict()
 L = dict()
 
-
-emotions=['show text', 'normal', 'happy1', 'happy2', 'angry', 'play', 'robot', 'yellow']
 show=Emotion()
 for servo in range(1, 10):
     R[servo] = rospy.Publisher('servo/R' + str(servo), Int16, queue_size=10)
@@ -28,34 +26,30 @@ HEAD_TXT = rospy.Publisher('poppy/face/text', Emotion, queue_size=10)
 
 
 def __init__(master, movement, motor, pub):
-    master.geometry('915x855')
+    master.geometry('575x405')
     master.title('SETTING THE HAND')
     title = Frame(master)
     title.grid(row=0, column=0, columnspan=3, sticky=W+E+N+S)
-    info = Label(title, justify=LEFT, text='play the recorded sign using the slider in the blue section and set the hand configuration using \n'
-                             'the sliders below than click "Set Pos" to record it, when you done all the hand sets click on \n'
-                             '"Build & Play" to build the movement than save it. \n '
-                             'you can also use "Delete before" and "Delete After" to delete unnecessary frames.')
-    info.pack()
-    lefthand = Frame(master, bg = "red")
+    lefthand = LabelFrame(master, text="Left hand", bg = "red")
     lefthand.grid(row=1, column=0)
-    righthand = Frame(master, bg = "green")
+    righthand = LabelFrame(master, text="Right hand", bg = "green")
     righthand.grid(row=1, column=2)
-    medButt = Frame(master,bg = "blue")
+    medButt = LabelFrame(master, text="Hands sets",bg = "blue")
     medButt.grid(row=1, column=1)
-    buttfram = Frame(master, bg="blue")
+    buttfram = LabelFrame(master, text="Tools", bg="blue")
     buttfram.grid(row=2, column=0, columnspan=3, sticky=W+E+N+S)
     master.closing = False
     master.movement = movement
     active_motors = master.movement['actors_NAME']
     dead_motors = [name for name in motor if name not in active_motors]
     print('Starting the ROBOT')
-    goal_position = master.movement['position']['0']
-    tools.go_to_pos(active_motors, motor, goal_position, pub)
     goal_position = {"Robot": [0 for name in dead_motors],
                      "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
                      "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100]}
     tools.go_to_pos(dead_motors, motor, goal_position, pub)
+
+    goal_position = master.movement['position']['0']
+    tools.go_to_pos(active_motors, motor, goal_position, pub)
     print('Robot started')
 
 
@@ -64,65 +58,65 @@ def __init__(master, movement, motor, pub):
     def LgetValue1(event):
         tools.left_servo_set(1, master.Lwrist_V.get(), L)
 
-    master.Lwrist_V = Scale(lefthand, label = "wrist_V N:1", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue1)
+    master.Lwrist_V = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue1)
     master.Lwrist_V.set(200)
-    master.Lwrist_V.pack()
+    master.Lwrist_V.grid(row=2, column=0, rowspan=3, sticky=E)
 
     def LgetValue2(event):
         tools.left_servo_set(2, master.Lwrist_H.get(), L)
 
-    master.Lwrist_H = Scale(lefthand, label = "wrist_H N:2", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue2)
+    master.Lwrist_H = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 100, showvalue=0, command = LgetValue2)
     master.Lwrist_H.set(200)
-    master.Lwrist_H.pack()
+    master.Lwrist_H.grid(row=4, column=1, columnspan=3, sticky=SW)
 
     def LgetValue3(event):
         tools.left_servo_set(3, master.Lthump_J.get(), L)
 
-    master.Lthump_J = Scale(lefthand, label = "Thump_J N:3", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue3)
+    master.Lthump_J = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 75, showvalue=0, command = LgetValue3)
     master.Lthump_J.set(100)
-    master.Lthump_J.pack()
+    master.Lthump_J.grid(row=2, column=3, columnspan=2, sticky=NE)
 
     def LgetValue4(event):
         tools.left_servo_set(4, master.Lthump.get(), L)
 
-    master.Lthump = Scale(lefthand, label = "Thump N:4", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue4)
+    master.Lthump = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue4)
     master.Lthump.set(100)
-    master.Lthump.pack()
+    master.Lthump.grid(row=0, column=4, rowspan=2, sticky=SE)
 
     def LgetValue5(event):
         tools.left_servo_set(5, master.LOpen.get(), L)
 
-    master.LOpen = Scale(lefthand, label = "Open N:5", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue5)
+    master.LOpen = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 125, showvalue=0, command = LgetValue5)
     master.LOpen.set(200)
-    master.LOpen.pack()
+    master.LOpen.grid(row=1, column=0, columnspan=4, sticky=W)
 
     def LgetValue6(event):
         tools.left_servo_set(6, master.Lindex.get(), L)
 
-    master.Lindex = Scale(lefthand, label = "Index N:6", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue6)
+    master.Lindex = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue6)
     master.Lindex.set(100)
-    master.Lindex.pack()
+    master.Lindex.grid(row=0, column=3)
 
     def LgetValue7(event):
         tools.left_servo_set(7, master.Lmajor.get(), L)
 
-    master.Lmajor = Scale(lefthand, label = "Major N:7", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue7)
+    master.Lmajor = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue7)
     master.Lmajor.set(100)
-    master.Lmajor.pack()
+    master.Lmajor.grid(row=0, column=2)
 
     def LgetValue8(event):
         tools.left_servo_set(8, master.Lring.get(), L)
 
-    master.Lring = Scale(lefthand, label = "Ring N:8", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue8)
+    master.Lring = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue8)
     master.Lring.set(100)
-    master.Lring.pack()
+    master.Lring.grid(row=0, column=1)
 
     def LgetValue9(event):
         tools.left_servo_set(9, master.Lauri.get(), L)
 
-    master.Lauri = Scale(lefthand, label = "Auriculaire N:9", from_=100, to =300, orient = HORIZONTAL, length = 300, command = LgetValue9)
+    master.Lauri = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue9)
     master.Lauri.set(100)
-    master.Lauri.pack()
+    master.Lauri.grid(row=0, column=0)
 #//////////////////////////////////////////////////////////////////////////LEFT  ARM////////////////////////////////////////////////////////////////////////
 
 
@@ -131,84 +125,81 @@ def __init__(master, movement, motor, pub):
         tools.right_servo_set(1, master.Rwrist_V.get(), R)
 
 
-    master.Rwrist_V = Scale(righthand, label="wrist_V N:1", from_=100, to =300, orient=HORIZONTAL, length=300,
-                            command=RgetValue1)
+    master.Rwrist_V = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue1)
     master.Rwrist_V.set(200)
-    master.Rwrist_V.pack()
+    master.Rwrist_V.grid(row=2, column=4, rowspan=3, sticky=W)
 
 
     def RgetValue2(event):
         tools.right_servo_set(2, master.Rwrist_H.get(), R)
 
 
-    master.Rwrist_H = Scale(righthand, label="wrist_H N:2", from_=100, to =300, orient=HORIZONTAL, length=300,
-                            command=RgetValue2)
+    master.Rwrist_H = Scale(righthand, from_=100, to =300, orient=HORIZONTAL, length=100, showvalue=0, command=RgetValue2)
     master.Rwrist_H.set(200)
-    master.Rwrist_H.pack()
+    master.Rwrist_H.grid(row=4, column=1, columnspan=3, sticky=SE)
 
 
     def RgetValue3(event):
         tools.right_servo_set(3, master.Rthump_J.get(), R)
 
 
-    master.Rthump_J = Scale(righthand, label="Thump_J N:3", from_=100, to =300, orient=HORIZONTAL, length=300,
-                            command=RgetValue3)
+    master.Rthump_J = Scale(righthand, from_=100, to =300, orient=HORIZONTAL, length=75, showvalue=0, command=RgetValue3)
     master.Rthump_J.set(100)
-    master.Rthump_J.pack()
+    master.Rthump_J.grid(row=2, column=0, columnspan=2, sticky=NW)
 
 
     def RgetValue4(event):
         tools.right_servo_set(4, master.Rthump.get(), R)
 
 
-    master.Rthump = Scale(righthand, label="Thump N:4", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue4)
+    master.Rthump = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue4)
     master.Rthump.set(100)
-    master.Rthump.pack()
+    master.Rthump.grid(row=0, column=0, rowspan=2, sticky=SW)
 
 
     def RgetValue5(event):
         tools.right_servo_set(5, master.ROpen.get(), R)
 
 
-    master.ROpen = Scale(righthand, label="Open N:5", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue5)
+    master.ROpen = Scale(righthand, from_=100, to =300, orient=HORIZONTAL, length=125, showvalue=0, command=RgetValue5)
     master.ROpen.set(200)
-    master.ROpen.pack()
+    master.ROpen.grid(row=1, column=1, columnspan=4, sticky=E)
 
 
     def RgetValue6(event):
         tools.right_servo_set(6, master.Rindex.get(), R)
 
 
-    master.Rindex = Scale(righthand, label="Index N:6", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue6)
+    master.Rindex = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue6)
     master.Rindex.set(100)
-    master.Rindex.pack()
+    master.Rindex.grid(row=0, column=1)
 
 
     def RgetValue7(event):
         tools.right_servo_set(7, master.Rmajor.get(), R)
 
 
-    master.Rmajor = Scale(righthand, label="Major N:7", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue7)
+    master.Rmajor = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue7)
     master.Rmajor.set(100)
-    master.Rmajor.pack()
+    master.Rmajor.grid(row=0, column=2)
 
 
     def RgetValue8(event):
         tools.right_servo_set(8, master.Rring.get(), R)
 
 
-    master.Rring = Scale(righthand, label="Ring N:8", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue8)
+    master.Rring = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue8)
     master.Rring.set(100)
-    master.Rring.pack()
+    master.Rring.grid(row=0, column=3)
 
 
     def RgetValue9(event):
         tools.right_servo_set(9, master.Rauri.get(), R)
 
 
-    master.Rauri = Scale(righthand, label="Auri N:9", from_=100, to =300, orient=HORIZONTAL, length=300, command=RgetValue9)
+    master.Rauri = Scale(righthand, from_=100, to =300, orient=VERTICAL, length=100, showvalue=0, command=RgetValue9)
     master.Rauri.set(100)
-    master.Rauri.pack()
+    master.Rauri.grid(row=0, column=4)
 #//////////////////////////////////////////////////////////////////////////RIGHT ARM////////////////////////////////////////////////////////////////////////
 
 
@@ -268,7 +259,8 @@ def __init__(master, movement, motor, pub):
                          "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100],
                          "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100]}
         tools.go_to_pos(active_motors, motor, goal_position, pub)
-        tools.releas(active_motors, pub, L, R)
+        tools.releas(active_motors, pub)
+        tools.multi_servo_set([0] * 9, [0] * 9, L, R)
         print 'Robot Closed'
 
         master.destroy()
@@ -410,30 +402,30 @@ def __init__(master, movement, motor, pub):
     def Rrel():
         tools.multi_servo_set(None, [50] * 9, None, R)
 
-    close = Button(buttfram, text='Close', width=10, command=closecall)
-    close.grid(row=6, column=4, sticky=E)
+    close = Button(buttfram, text='Close', width=5, command=closecall)
+    close.grid(row=4, column=7, sticky=E)
 
 
-    rel = Button(lefthand, text="Release",width = 10, command =  Lrel)
-    rel.pack(side=LEFT)
-    LSET = Button(lefthand, text=">>", width=10, command=saveL)
-    LSET.pack(side=RIGHT)
+    rel = Button(lefthand, text="Rel",width = 0, command =  Lrel)
+    rel.grid(row=3, column=1)
+    LSET = Button(lefthand, text=">>", width=0, command=saveL)
+    LSET.grid(row=3, column=3)
     master.Lrec = IntVar(lefthand,value=0)
-    recL = Checkbutton(lefthand, text='Record Mode', variable=master.Lrec)
-    recL.pack()
+    recL = Checkbutton(lefthand, variable=master.Lrec)
+    recL.grid(row=3, column=2)
 
-    rer = Button(righthand, text="Release", width=10, command= Rrel)
-    rer.pack(side=RIGHT)
-    RSET = Button(righthand, text="<<", width=10, command=saveR)
-    RSET.pack(side=LEFT)
+    rer = Button(righthand, text="Rel", width=0, command= Rrel)
+    rer.grid(row=3, column=3)
+    RSET = Button(righthand, text="<<", width=0, command=saveR)
+    RSET.grid(row=3, column=1)
     master.Rrec = IntVar(righthand, value=0)
-    recR = Checkbutton(righthand, text='Record Mode', variable=master.Rrec)
-    recR.pack()
+    recR = Checkbutton(righthand, variable=master.Rrec)
+    recR.grid(row=3, column=2)
 
 
-    L_handSets = Listbox(medButt, height=33, width=15)
+    L_handSets = Listbox(medButt, height=10, width=10)
     L_handSets.grid(row=2, column=0, columnspan=2)
-    R_handSets = Listbox(medButt, height=33, width=15)
+    R_handSets = Listbox(medButt, height=10, width=10)
     R_handSets.grid(row=2, column=2, columnspan=2)
     try:
         with open("/home/odroid/catkin_ws/src/robot_body/recording/handSetting.json", "r") as f:
@@ -508,59 +500,61 @@ def __init__(master, movement, motor, pub):
         else:
             print "No setting is selected"
 
-    leftSet = Button(medButt, text="<<", width=5, command=setleft)
+    leftSet = Button(medButt, text="<<", width=0, command=setleft)
     leftSet.grid(row=3, column=0, sticky=E)
-    LDEL = Button(medButt, text="DEL", width=5, command=L_DEL)
+    LDEL = Button(medButt, text="DEL", width=0, command=L_DEL)
     LDEL.grid(row=3, column=1, sticky=W)
 
-    rightSet = Button(medButt, text=">>", width=5, command=setright)
+    rightSet = Button(medButt, text=">>", width=0, command=setright)
     rightSet.grid(row=3, column=3, sticky=W)
-    RDEL = Button(medButt, text="DEL", width=5, command=R_DEL)
+    RDEL = Button(medButt, text="DEL", width=0, command=R_DEL)
     RDEL.grid(row=3, column=2, sticky=E)
     master.steps = StringVar(master, value=1)
     master.frm = 0
-    master.recSlider = Scale(buttfram, from_=0, to=master.movement['frame_number']-1, orient=HORIZONTAL, length=910, command=setframe)
+    master.recSlider = Scale(buttfram, from_=0, to=master.movement['frame_number']-1, orient=HORIZONTAL, length=430, showvalue=0, command=setframe)
     master.recSlider.set(0)
-    master.recSlider.grid(row=0, column=0, columnspan=5)
-    del_befor = Button(buttfram, text='Delete Before', width=10, command=DelBefor)
-    del_befor.grid(row=1, column=0)
-    del_after = Button(buttfram, text='Delete After', width=10, command=DelAfter)
-    del_after.grid(row=1, column=4)
+    master.recSlider.grid(row=0, column=1, columnspan=6)
+    del_befor = Button(buttfram, text='Del', width=5, command=DelBefor)
+    del_befor.grid(row=0, column=0)
+    del_after = Button(buttfram, text='Del', width=5, command=DelAfter)
+    del_after.grid(row=0, column=7)
     master.autoSmth = IntVar(master, value=1)
-    master.autoSmooth = Checkbutton(buttfram, text='Auto Smoothing', variable=master.autoSmth, command=setauto)
-    master.autoSmooth.grid(row=2, column=0)
-    master.smooth = Scale(buttfram, label = "Smoothing:", from_=0, to=master.movement['frame_number']-1, takefocus=1, orient=HORIZONTAL, length=250)
+    master.autoSmooth = Checkbutton(buttfram, text='Auto', variable=master.autoSmth, command=setauto)
+    master.autoSmooth.grid(row=1, column=1)
+    master.smooth = Scale(buttfram, from_=0, to=master.movement['frame_number']-1, orient=HORIZONTAL, length=100, showvalue=0)
     master.smooth.set(min(30, master.movement['frame_number'] - 1))
-    master.smooth.grid(row=2, column=1, columnspan=2, sticky=W)
+    master.smooth.grid(row=1, column=2, sticky=W)
     master.smooth.config(state=DISABLED)
-    setpos = Button(buttfram, text='Set Pos', width=10, command=setcall)
-    setpos.grid(row=3, column=0)
-    build = Button(buttfram, text='Build & play', width=10, command=buildPlay)
-    build.grid(row=4, column=0)
-    save = Button(buttfram, text='Save', width=10, command=savecall)
-    save.grid(row=5, column=0)
+    setpos = Button(buttfram, text='Set', width=5, command=setcall)
+    setpos.grid(row=1, column=0)
+    build = Button(buttfram, text='Build', width=5, command=buildPlay)
+    build.grid(row=2, column=0)
+    save = Button(buttfram, text='Save', width=5, command=savecall)
+    save.grid(row=3, column=0)
     save.config(state=DISABLED)
-    clear = Button(buttfram, text='Clear', width=10, command=clearcall)
-    clear.grid(row=6, column=0)
+    clear = Button(buttfram, text='Clear', width=5, command=clearcall)
+    clear.grid(row=4, column=0)
     clear.config(state=DISABLED)
-    master.emotion_list = Listbox(buttfram, width=15, height=13)
-    master.emotion_list.grid(row=2, column=2, rowspan=5, sticky=W)
+    master.text_to_show = Label(buttfram, text="Text to show:")
+    master.text_to_show.grid(row=1,  column=3, sticky=E)
+    master.text = StringVar()
+    master.textEntry = Entry(buttfram, width=10, textvariable=master.text)
+    master.textEntry.grid(row=1, column=4, sticky=W)
 
+    master.emotion_to_show = Label(buttfram, text="Emotion to show:")
+    master.emotion_to_show.grid(row=2,  column=3, sticky=E)
+    master.emotion_list = Listbox(buttfram, width=10, height=5)
+    master.emotion_list.grid(row=2, column=4, rowspan=3, sticky=W)
 
+    emotions = ssh_files.get("head", "pi", "headdriver", "/home/pi/catkin_ws/src/head_driver_pkg/src/emotions", '"*.gif"')
+    emotions.insert(0,"show text")
     for name in emotions:
         master.emotion_list.insert(END, str(name))
 
-    master.text = StringVar()
-    master.textEntry = Entry(buttfram, width=15, textvariable=master.text)
-    master.textEntry.grid(row=1, column=2, sticky=W)
-
+    master.showing_time = Label(buttfram, text="Time:")
+    master.showing_time.grid(row=1, column=5, sticky=E)
     master.emotion_time = StringVar(value=2)
     master.emotion_timeEntry = Entry(buttfram, width=3, textvariable=master.emotion_time)
-    master.emotion_timeEntry.grid(row=1, column=3, sticky=W)
-    msg = Label(buttfram, height=8, justify=LEFT, text= '<----- Click here to record a hand set.\n\n'
-                                                        '<----- Click here to build or play the recording.                    Add face emotion----->  \n\n'
-                                                        '<----- Click here to save. \n\n'
-                                                        '<----- Click here to clear all and start over')
-    msg.grid(row=3, column=1, rowspan=4, sticky=W)
+    master.emotion_timeEntry.grid(row=1, column=6, sticky=W)
     master.needToBuild = False
     master.setted_frame = []
