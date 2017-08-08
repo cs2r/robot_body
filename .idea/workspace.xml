@@ -5,69 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f634bd1a-e520-4431-bd2c-72f7fdb5663e" name="Default" comment="single motor update">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/robot_tools/ssh_get_files.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/ALARABIA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/ALICHARA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/ANA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/BAY.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/CAN.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/CHANTA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/CLAPPING.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/COUNT.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/DEATH.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/EIGHT.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/EVENING.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/FA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/FEEL.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/FIVE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/FOUR.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/HOSPITAL.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/JOB.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/KAF.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/KING.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/LANGUAGE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/LOGHAT.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/MARQUAZ.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/MORNING.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/MOSQUE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/NINE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/ONE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/PRAYER.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/QAF.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/RA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/ROBOT.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/SALAM.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/SAUD.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/SEVEN.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/SING.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/SIX.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/TABIB.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/TATWIR.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/TEN.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/THREE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/TWO.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/UNIVERSITY.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/VACATION.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/WHERE.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/YA.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/angry.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/recording/data_base/test.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/robot_tools/test.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/robot_new.iml" afterPath="$PROJECT_DIR$/.idea/robot_new.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/driver/Robot_driver.py" afterPath="$PROJECT_DIR$/driver/Robot_driver.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/driver/word_listener.py" afterPath="$PROJECT_DIR$/driver/word_listener.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/launch/Recording_stat.launch" afterPath="$PROJECT_DIR$/launch/Recording_stat.launch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/launch/Robot_start_stat.launch" afterPath="$PROJECT_DIR$/launch/Robot_start_stat.launch" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pypot/dynamixel/io/abstract_io.py" afterPath="$PROJECT_DIR$/pypot/dynamixel/io/abstract_io.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pypot/robot/config.py" afterPath="$PROJECT_DIR$/pypot/robot/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/recording/HiPoppy.py" afterPath="$PROJECT_DIR$/recording/HiPoppy.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/recording/finger.py" afterPath="$PROJECT_DIR$/recording/finger.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/recording/handSetting.json" afterPath="$PROJECT_DIR$/recording/handSetting.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/recording/update_files.py" afterPath="$PROJECT_DIR$/recording/update_files.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robot_tools/robot_stat.py" afterPath="$PROJECT_DIR$/robot_tools/robot_stat.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robot_tools/robot_tools.py" afterPath="$PROJECT_DIR$/robot_tools/robot_tools.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/robot_tools/words_publisher.py" afterPath="$PROJECT_DIR$/robot_tools/words_publisher.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -82,7 +20,7 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="ssh_get_files.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ssh_get_files.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/robot_tools/ssh_get_files.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="375">
@@ -94,11 +32,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="finger.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="finger.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/recording/finger.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="556" column="2" lean-forward="false" selection-start-line="556" selection-start-column="2" selection-end-line="556" selection-end-column="2" />
+            <state relative-caret-position="280">
+              <caret line="88" column="55" lean-forward="false" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
               <folding>
                 <element signature="e#18#29#0" expanded="true" />
               </folding>
@@ -213,8 +151,8 @@
         <option value="$PROJECT_DIR$/recording/main_menu.py" />
         <option value="$PROJECT_DIR$/recording/HiPoppy.py" />
         <option value="$PROJECT_DIR$/robot_tools/test.py" />
-        <option value="$PROJECT_DIR$/recording/finger.py" />
         <option value="$PROJECT_DIR$/robot_tools/ssh_get_files.py" />
+        <option value="$PROJECT_DIR$/recording/finger.py" />
       </list>
     </option>
   </component>
@@ -559,7 +497,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="24" width="1922" height="1033" extended-state="7" />
+    <frame x="-1" y="24" width="1922" height="1033" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.10437533" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -796,22 +734,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/recording/finger.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="556" column="2" lean-forward="false" selection-start-line="556" selection-start-column="2" selection-end-line="556" selection-end-column="2" />
-          <folding>
-            <element signature="e#18#29#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/robot_tools/ssh_get_files.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="375">
           <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
           <folding>
             <element signature="e#0#15#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/recording/finger.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="88" column="55" lean-forward="false" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
+          <folding>
+            <element signature="e#18#29#0" expanded="true" />
           </folding>
         </state>
       </provider>

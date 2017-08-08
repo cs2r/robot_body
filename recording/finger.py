@@ -58,21 +58,21 @@ def __init__(master, movement, motor, pub):
     def LgetValue1(event):
         tools.left_servo_set(1, master.Lwrist_V.get(), L)
 
-    master.Lwrist_V = Scale(lefthand, from_=100, to =300, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue1)
+    master.Lwrist_V = Scale(lefthand, from_=300, to =100, orient = VERTICAL, length = 100, showvalue=0, command = LgetValue1)
     master.Lwrist_V.set(200)
     master.Lwrist_V.grid(row=2, column=0, rowspan=3, sticky=E)
 
     def LgetValue2(event):
         tools.left_servo_set(2, master.Lwrist_H.get(), L)
 
-    master.Lwrist_H = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 100, showvalue=0, command = LgetValue2)
+    master.Lwrist_H = Scale(lefthand, from_=300, to =100, orient = HORIZONTAL, length = 100, showvalue=0, command = LgetValue2)
     master.Lwrist_H.set(200)
     master.Lwrist_H.grid(row=4, column=1, columnspan=3, sticky=SW)
 
     def LgetValue3(event):
         tools.left_servo_set(3, master.Lthump_J.get(), L)
 
-    master.Lthump_J = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 75, showvalue=0, command = LgetValue3)
+    master.Lthump_J = Scale(lefthand, from_=300, to =100, orient = HORIZONTAL, length = 75, showvalue=0, command = LgetValue3)
     master.Lthump_J.set(100)
     master.Lthump_J.grid(row=2, column=3, columnspan=2, sticky=NE)
 
@@ -86,7 +86,7 @@ def __init__(master, movement, motor, pub):
     def LgetValue5(event):
         tools.left_servo_set(5, master.LOpen.get(), L)
 
-    master.LOpen = Scale(lefthand, from_=100, to =300, orient = HORIZONTAL, length = 125, showvalue=0, command = LgetValue5)
+    master.LOpen = Scale(lefthand, from_=300, to =100, orient = HORIZONTAL, length = 125, showvalue=0, command = LgetValue5)
     master.LOpen.set(200)
     master.LOpen.grid(row=1, column=0, columnspan=4, sticky=W)
 
