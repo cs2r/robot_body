@@ -1,0 +1,8 @@
+<launch>
+	<machine name="right_raspberrypi" address="10.42.0.23" env-loader="/opt/ros/groovy/env.sh" user="pi" password="raspberry"/>
+	<machine name="left_raspberrypi"  address="10.42.0.24" env-loader="/opt/ros/groovy/env.sh" user="pi" password="raspberry"/>
+	<node machine="right_raspberrypi" name="Right_hand_driver" pkg="right_hand" type="Servo_driver.py"/>
+	<node machine="left_raspberrypi"  name="Left_hand_driver"  pkg="left_hand"  type="Servo_driver.py"/>
+	<node name="Word_listener" pkg="robot_body"  type="word_listener.py"  output="screen"/>
+	<node name="Robot_driver" pkg="robot_body"  type="Robot_driver.py"  output="screen"/>
+</launch>

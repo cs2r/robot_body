@@ -1,0 +1,1 @@
+/home/odroid/catkin_ws/src/robot_body/pypot/robot/config.py
