@@ -50,12 +50,15 @@
           <option value="E501" />
           <option value="W29" />
           <option value="E501" />
+<<<<<<< HEAD
           <option value="W29" />
           <option value="E501" />
           <option value="W29" />
           <option value="E501" />
           <option value="W29" />
           <option value="E501" />
+=======
+>>>>>>> 3917f49b620ac667fd1a7bfcdb2e7b2991a0e455
         </list>
       </option>
     </inspection_tool>

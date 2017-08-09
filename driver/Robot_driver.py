@@ -105,6 +105,7 @@ def publisher():
             motor.offset = m.offset
             motor.max_load = m.torque_limit
             pub[m.name].publish(motor)
+<<<<<<< HEAD
             if m.torque_limit == 0:
                 robot_status = motor.name + ' is OVERLOADED'
                 pupStat.publish(robot_status)
@@ -112,6 +113,9 @@ def publisher():
                 Closing()
                 return
             if (motor.present_temperature > 67):
+=======
+            if (motor.present_temperature > 70):
+>>>>>>> 3917f49b620ac667fd1a7bfcdb2e7b2991a0e455
                 robot_status = motor.name + ' is OVERHEATED, Present Tempirature is ' + str(motor.present_temperature)
                 pupStat.publish(robot_status)
                 print robot_status
@@ -120,6 +124,10 @@ def publisher():
         time.sleep(0.001)
 
 if __name__ == '__main__':
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3917f49b620ac667fd1a7bfcdb2e7b2991a0e455
     rospy.init_node('robot_node', anonymous=True)
     #Openning()
     for m in robot.motors:
