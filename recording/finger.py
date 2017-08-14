@@ -410,7 +410,7 @@ def __init__(master, movement, motor, pub):
     rel.grid(row=3, column=1)
     LSET = Button(lefthand, text=">>", width=0, command=saveL)
     LSET.grid(row=3, column=3)
-    master.Lrec = IntVar(lefthand,value=0)
+    master.Lrec = IntVar(lefthand,value=1)
     recL = Checkbutton(lefthand, variable=master.Lrec)
     recL.grid(row=3, column=2)
 
@@ -418,7 +418,7 @@ def __init__(master, movement, motor, pub):
     rer.grid(row=3, column=3)
     RSET = Button(righthand, text="<<", width=0, command=saveR)
     RSET.grid(row=3, column=1)
-    master.Rrec = IntVar(righthand, value=0)
+    master.Rrec = IntVar(righthand, value=1)
     recR = Checkbutton(righthand, variable=master.Rrec)
     recR.grid(row=3, column=2)
 
