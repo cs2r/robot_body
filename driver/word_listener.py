@@ -99,19 +99,23 @@ def do_sign(buffer):
                     right_hand = sign[str(frames - 1)]["Right_hand"]
                     left_hand  = sign[str(frames - 1)]["Left_hand"]
                     old_motors = names
-
-                    if not buffer:
-                        goal_position = {'Robot': [0 for name in names],
-                                         'Right_hand': [200, 200, 100, 100, 200, 100, 100, 100, 100],
-                                         'Left_hand': [200, 200, 100, 100, 200, 100, 100, 100, 100]}
-                        tools.go_to_pos(names, present_pos, goal_position, pub, L, R, left_hand, right_hand)
-                        right_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
-                        left_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
-                        tools.releas([name for name in names if name not in torso], pub, None, L, R)
-                        old_motors = []
             except Exception, err:
                 print 'Robot can not do sign, error is '
                 print  err
+
+
+
+            if not buffer:
+                goal_position = {'Robot': [0 for name in names],
+                                 'Right_hand': [200, 200, 100, 100, 200, 100, 100, 100, 100],
+                                 'Left_hand': [200, 200, 100, 100, 200, 100, 100, 100, 100]}
+                tools.go_to_pos(names, present_pos, goal_position, pub, L, R, left_hand, right_hand)
+                right_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
+                left_hand = [200, 200, 100, 100, 200, 100, 100, 100, 100]
+                tools.releas([name for name in names if name not in torso], pub, None, L, R)
+                old_motors = []
+
+
         else:
             if (time.time() - start > time_to_sleep) & (robot_stat == 'ready'):
                 tools.releas([name for name in list  if present_pos[name].compliant == False], pub, present_pos, L, R)
@@ -132,6 +136,6 @@ def listener():
     rospy.spin()
 
 if __name__ == '__main__':
-
+    time.sleep(3)
     thread.start_new_thread(do_sign,(buffer,))
     listener()
