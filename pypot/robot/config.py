@@ -354,17 +354,17 @@ robot_2_config = {
       "r_arm"
     ],
       "ax_arms": [
+      "r_shoulder_y",
       "r_shoulder_x",
       "r_arm_z",
       "r_forearm_z",
+      "l_shoulder_y",
       "l_shoulder_x",
       "l_arm_z",
       "l_forearm_z"
     ],
       "rx_arms": [
-        "r_shoulder_y",
         "r_elbow_y",
-        "l_shoulder_y",
         "l_elbow_y"
       ]
 },
@@ -421,7 +421,7 @@ robot_2_config = {
     },
     "r_shoulder_y": {
       "offset": 90,
-      "type": "RX-64",
+      "type": "MX-64",
       "id": 51,
       "angle_limit": [
         -155,
@@ -471,7 +471,7 @@ robot_2_config = {
     },
     "l_shoulder_y": {
       "offset": 90,
-      "type": "RX-64",
+      "type": "MX-64",
       "id": 41,
       "angle_limit": [
         -120,

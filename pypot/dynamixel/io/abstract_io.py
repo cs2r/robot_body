@@ -46,7 +46,7 @@ class AbstractDxlIO(object):
     # MARK: - Open, Close and Flush the communication
 
     def __init__(self,
-                 port, baudrate=100000, timeout=0.05,
+                 port, baudrate=1000000, timeout=0.05,
                  use_sync_read=False,
                  error_handler_cls=None,
                  convert=True):
@@ -89,7 +89,7 @@ class AbstractDxlIO(object):
                 'baudrate={self.baudrate}, '
                 'timeout={self.timeout}>').format(self=self)
 
-    def open(self, port, baudrate=100000, timeout=0.05):#1000000, timeout=0.05):
+    def open(self, port, baudrate=1000000, timeout=0.05):#1000000, timeout=0.05):
         """ Opens a new serial communication (closes the previous communication if needed).
 
             :raises: :py:exc:`~pypot.dynamixel.io.DxlError` if the port is already used.

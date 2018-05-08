@@ -58,4 +58,6 @@ Installation:
 
       $ roslaunch robot_body Recording_stat.launch
 
-  
+
+
+  INFO: to change the baudrate go to pypot/dynamixel/io/abstract_io.py and change the baudrate value in __init__ and open functions

@@ -102,6 +102,10 @@ def do_sign(buffer):
             except Exception, err:
                 print 'Robot can not do sign, error is '
                 print  err
+                show.name = SIGN
+                show.time = 3
+                HEAD_TXT.publish(show)
+                time.sleep(3)
 
 
 

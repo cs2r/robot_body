@@ -50,7 +50,7 @@ def __init__(master, movement, motor, pub):
 
     goal_position = master.movement['position']['0']
     tools.go_to_pos(active_motors, motor, goal_position, pub)
-    print('Robot started')
+    print('Robot Started')
 
 
 
