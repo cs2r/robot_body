@@ -21,6 +21,7 @@ for servo in range(1, 10):
 HEAD_EMO = rospy.Publisher('poppy/face/emotion', Emotion, queue_size=10)
 HEAD_TXT = rospy.Publisher('poppy/face/text', Emotion, queue_size=10)
 SPEAKER = rospy.Publisher('speak_ar', String, queue_size=10)
+playingPub = rospy.Publisher('poppy/isPlaying/' , Int64, queue_size=10)
 show = Emotion()
 print "WORD_LISTENNER successful import"
 list = ['abs_z', 'head_z', 'head_y', 'l_shoulder_y', 'l_shoulder_x', 'l_arm_z', 'l_elbow_y',
@@ -135,7 +136,6 @@ def do_sign(buffer):
 def listener():
     rospy.init_node('listener', anonymous=True)
     rospy.Subscriber('Word', String, callback=callback)
-    playingPub = rospy.Publisher('poppy/isPlaying/' , Int64, queue_size=10)
     for name in list:
         pub[name] = rospy.Publisher('poppy/set/' + name, motorSet, queue_size=1)
         rospy.Subscriber('poppy/get/' + name, motorStat, callback=get_motors)
