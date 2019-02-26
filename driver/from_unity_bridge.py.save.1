@@ -1,0 +1,21 @@
+# -*- coding: UTF-8 -*-  # this is to add arabic coding to python#!/usr/bin/env python
+# -*- coding: UTF-8 -*-  # this is to add arabic coding to python
+import rospy
+from std_msgs.msg import Int64
+from std_msgs.msg import String
+dictionar = []
+file = open("/home/odroid/catkin_ws/src/robot_body/driver/robot_database.txt", "r")
+for line in file:
+	line.split("\n")
+	dictionar.append(line[0])
+print dictionar
+
+def callback(data):
+	word = dictionar[data.data]
+	word_pub.publish(word)
+
+rospy.init_node('from_unity_bridge', anonymous=True)
+word_pub = rospy.Publisher("/Word", String, queue_size=10)
+rospy.Subscriber("/word_index", Int64, callback)
+
+rospy.spin()
