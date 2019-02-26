@@ -8,7 +8,7 @@ import time
 from std_msgs.msg import String
 from robot_body.msg import motorSet, motorStat, Emotion
 import robot_tools.robot_tools as tools
-from std_msgs.msg import Int16
+from std_msgs.msg import Int16, Int64
 
 time_to_sleep = 2 * 60   # in second
 
@@ -64,41 +64,6 @@ def do_sign(buffer):
                 print 'Doing sign: ' + SIGN
                 with open("/home/odroid/catkin_ws/src/robot_body/recording/data_base/" + SIGN + ".json", "r") as sign:
                     movement = json.load(sign)
-                    names = movement["actors_NAME"]
-                    frames = movement["frame_number"]
-                    freq = float(movement["freq"])
-                    emotion = movement["emotion_name"]
-                    text = movement["text"]
-                    time_to_show = [3]#movement["emotion_time"]
-                    word_to_speak = movement["speak"]
-                    sign = movement["position"]
-                    motor_to_release = [mtr for mtr in old_motors if (mtr not in names) & (mtr not in torso)]
-                    if motor_to_release:
-                        goal_position = {"Robot": sign['0']['Robot']+[0 for name in motor_to_release],
-                            "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100] if [mtr for mtr in motor_to_release if mtr in right_hand_motors]
-                            else sign['0']['Right_hand'],
-                            "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100] if [mtr for mtr in motor_to_release if mtr in left_hand_motors]
-                            else sign['0']['Left_hand']}
-                    else:
-                        goal_position = sign['0']
-                    tools.go_to_pos(names+motor_to_release, present_pos, goal_position, pub, L, R, left_hand, right_hand)
-                    tools.releas(motor_to_release, pub, present_pos)
-                    if emotion != '':
-                        HEAD_PUB = HEAD_EMO
-                        show.name = emotion
-                    elif text != '':
-                        HEAD_PUB = HEAD_TXT
-                        show.name = text
-                    else:
-                        HEAD_PUB = None
-                    print "time: " + str(time_to_show)
-                    if time_to_show:
-                        show.time = time_to_show[0]
-                    SPEAKER.publish(word_to_speak)
-                    tools.do_seq(names, freq, sign, pub, L, R, HEAD_PUB, show)
-                    right_hand = sign[str(frames - 1)]["Right_hand"]
-                    left_hand  = sign[str(frames - 1)]["Left_hand"]
-                    old_motors = names
             except Exception, err:
                 print 'Robot can not do sign, error is '
                 print  err
@@ -106,7 +71,45 @@ def do_sign(buffer):
                 show.time = 3
                 HEAD_TXT.publish(show)
                 time.sleep(3)
-
+                continue
+            playingPub.publish(1)
+            names = movement["actors_NAME"]
+            frames = movement["frame_number"]
+            freq = float(movement["freq"])
+            emotion = movement["emotion_name"]
+            text = movement["text"]
+            time_to_show = [3]#movement["emotion_time"]
+            word_to_speak = movement["speak"]
+            sign = movement["position"]
+            motor_to_release = [mtr for mtr in old_motors if (mtr not in names) & (mtr not in torso)]
+            if motor_to_release:
+                goal_position = {"Robot": sign['0']['Robot']+[0 for name in motor_to_release],
+                    "Right_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100] if [mtr for mtr in motor_to_release if mtr in right_hand_motors]
+                    else sign['0']['Right_hand'],
+                    "Left_hand": [200, 200, 100, 100, 200, 100, 100, 100, 100] if [mtr for mtr in motor_to_release if mtr in left_hand_motors]
+                    else sign['0']['Left_hand']}
+            else:
+                goal_position = sign['0']
+            tools.go_to_pos(names+motor_to_release, present_pos, goal_position, pub, L, R, left_hand, right_hand)
+            tools.releas(motor_to_release, pub, present_pos)
+            if emotion != '':
+                HEAD_PUB = HEAD_EMO
+                show.name = emotion
+            elif text != '':
+                HEAD_PUB = HEAD_TXT
+                show.name = text
+            else:
+                HEAD_PUB = None
+            print "time: " + str(time_to_show)
+            if time_to_show:
+                show.time = time_to_show[0]
+            SPEAKER.publish(word_to_speak)
+            tools.do_seq(names, freq, sign, pub, L, R, HEAD_PUB, show)
+            right_hand = sign[str(frames - 1)]["Right_hand"]
+            left_hand  = sign[str(frames - 1)]["Left_hand"]
+            old_motors = names
+            
+            playingPub.publish(0)
 
 
             if not buffer:
@@ -132,6 +135,7 @@ def do_sign(buffer):
 def listener():
     rospy.init_node('listener', anonymous=True)
     rospy.Subscriber('Word', String, callback=callback)
+    playingPub = rospy.Publisher('poppy/isPlaying/' , Int64, queue_size=10)
     for name in list:
         pub[name] = rospy.Publisher('poppy/set/' + name, motorSet, queue_size=1)
         rospy.Subscriber('poppy/get/' + name, motorStat, callback=get_motors)
