@@ -47,7 +47,7 @@ Installation:
     
       source ~/catkin_ws/devel/setup.bash
       export ROS_MASTER_URI=http://odroid:11311
-      export ROSLAUNCH_SSH_UNKOWN=1
+      export ROSLAUNCH_SSH_UNKNOWN=1
       
   set the devices IPs
     
